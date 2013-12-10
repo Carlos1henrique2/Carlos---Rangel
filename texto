@@ -1,0 +1,77 @@
+Robô Carro
+Este exemplo mostra como construir um robô carro que por sua vez se move a partir de dois motores controlados por seus devidos comandos.
+Hardware necessário
+- Arduino Uno
+- Arduino Motor Shield
+- Dois Mini Motores
+- Fios para a conexão
+- Arduino Protoboard (Opcional)
+Circuito
+Para construir o circuito , conecte entre si os pinos GND da placa Arduino Motor Shield juntamente a um pino GND na placa Arduino Uno. Utilizando o mesmo esquema acima citado , conecte o pino VIN da placa Arduino Motor Shield em seu pino de +5V juntamente a outro pino GND da placa Arduino Uno, em seguida conecte os mini motores a placa Arduino Motor Shield , um motor conectado aos pinos A+ e  A-  logo o segunto motor conectado aos pinos B+ e B-
+Segue a imagem para facilitar o entendimento :
+
+A placa Arduino Motor Shield pode ser conectada diretamente a placa Arduino Uno , sendo assim a placa Protoboard na imagem exemplo é utilizada apenas para facilitar o entendimento da conexão dos pinos.
+
+http://imageshack.com/a/img811/7089/hggu.jpg
+
+Esquemático
+
+http://imageshack.com/a/img577/1936/aoqr.jpg
+
+Código
+Para o funcionamento do código e necessário uma librarie.
+O movimento do motor e feito a partir do reconhecimento de uma letra/numero, como nos jogos de computador em que se utiliza as teclas  “A”, “W”,”S”,”D” ou números “8”,”4”,”2”,”6” ( também utilizado nos jogos de celulares mais antigos) para se movimentar.
+Neste caso utilizamos os números “8” para se movimentar o carro para frente, “4” para a esquerda, “2” para a direita e “6” para trás.
+Você deve estar se perguntando onde digitar o numero , bom é muito simples, logo depois de ter feito toda a conexão e enviado o código corretamente. Clique na aba “Tools” do programa Arduino e selecione a opção “Serial Monitor” onde você pode digitar o numero e envia-lo para a execução .
+OBS : podem ser digitados vários números de uma só vez .
+EXEMPLO :  digite “888444666222”; este comando fara com que o carro se mova para frente para esquerda para direita e por fim para trás.
+Segue abaixo o código comentado para  o funcionamento dos motores :
+
+#include <DualMotor.h> //Inclui a biblioteca DualMotor.h
+DualMotor dualmotor; //Instância a DualMotor
+char letra; //Cria uma variável char para armazenamento dos caraceteres lidos
+void setup()
+{
+  Serial.begin(9600); //Inicia a Serial com um Baud Rate de 9600bps
+    dualmotor.M1parar(); //Para o motor1
+    dualmotor.M2parar(); //Para o motor2 
+}
+void loop()
+{
+  if (Serial.available() > 0) //Se algo for recebido na serial
+  {
+    letra = Serial.read(); //Armazena o que foi recebido na variável letra
+    switch(letra) //Entra no switch para a comparação do caractere recebido
+    {
+// 255 é a velocidade do motor . 0 ou 1 e a direção do motor, sendo 1 para frente e 0 para tras.
+    case '8'://FRENTE          //Caso o caracter for igual a 8, vai pra FRENTE
+      dualmotor.M1move(255,1);
+      dualmotor.M2move(255,1);
+      break; //Sai do switch
+      
+    case '4'://ESQUERDA        //Caso o caracter for igual a 4, vira pra ESQUERDA
+      dualmotor.M1move(255,0);
+      dualmotor.M2move(255,1); 
+      break; //Sai do switch
+      
+    case '2'://TRÁS            //Caso o caracter for igual a 2, vai pra TRAS
+      dualmotor.M1move(255,0);
+      dualmotor.M2move(255,0);
+      break; //Sai do switch
+      
+    case '6'://senEITA        //Caso o caracter for igual a 6, vira pra DIREITA
+      dualmotor.M1move(255,1);
+      dualmotor.M2move(255,0); 
+      break; //Sai do switch
+    }
+    delay(250); //Delay de 250 milissegundos
+    dualmotor.M1parar(); //Para o motor 1
+    dualmotor.M2parar(); //Para o motor 2 
+    letra = 0;//Limpa a variável letra
+  }
+}// 255 é a velocidade do motor . 0 ou 1 e a direção do motor, sendo 1 para frente e 0 para tras.
+LINK para download do código junto a librarie : 
+http://www.4shared.com/zip/dqvftWJg/DualMotor.html?
+Copie a pasta “DualMotor” vá ate a pasta onde se encontra localizado o seu programa Arduino , procure pela pasta “Libraries” e cole .
+Vídeo demonstrando o funcionamento do Robô Carro :
+http://youtu.be/lKguua1BMiI
